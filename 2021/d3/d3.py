@@ -65,7 +65,7 @@ if __name__ == "__main__":
         data = f.read()
     lines = data.strip().split("\n")
 
-    # While the input is a list of binary numbers, for it's more convenient just treat them as arbitrary strings at first
+    # While the input is a list of binary numbers, it's more convenient just treat them as arbitrary strings at first
     part1(lines)
     part2(lines)
     

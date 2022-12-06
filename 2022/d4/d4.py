@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 
 # https://adventofcode.com/2022/day/4
+"""
+Note: the section-parsing function can be simplified to just splitting on any of "," and "-" with re.split,
+  then taking all 4 values at once.
+Also, building 2 sets the size of each section scales horribly as the section-size grows.
+  A better-scaling solution would just compare the start- and end-points of each section to see if they overlap.
+  (Some examples of this are probably in https://www.reddit.com/r/adventofcode/comments/zc0zta/2022_day_4_solutions/ )
+"""
 
 def part1(lines):
     # Parsing each line as we iterate, since the logic for 3 splits is messy.

@@ -30,7 +30,7 @@ def part2(root):
     
     (out_d, out_size) = min(((d, size) for (d, size) in sizes.items() if size >= target_space), key = lambda e: e[1])
     print("Part 2 result:")
-    print(f"Deleting the smallest appropriate directory {out_d.name} would save {out_size} space")
+    print(f"Deleting the smallest appropriate directory {out_d.full_name()} would save {out_size} space")
     
 class Directory:
     def __init__(self, name, parent):
@@ -51,6 +51,12 @@ class Directory:
             print(f"dir {directory.name}")
         for file in self.child_files:
             print(f"{file.size} {file.name}")
+
+    def full_name(self):
+        if self.parent is None:
+            return self.name
+        else:
+            return f"{self.parent.full_name()}{self.name}/"
     
     def _child_dir_names(self):
         return (d.name for d in self.child_directories)

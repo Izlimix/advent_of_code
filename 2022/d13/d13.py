@@ -31,7 +31,7 @@ def part2(packet_pairs):
     print(f"Positions: {divider_positions}")
     print(f"Decoder key: {divider_positions[0] * divider_positions[1]}")
     
-def compare_packets(left, right):
+def compare_packets_original(left, right):
     # Note: "right order" and "wrong order" should both short-circuit the result!
     # So we'll use True and False for "right order" and "wrong order", and None for "keep checking"
     if isinstance(left, int) and isinstance(right, int):
@@ -63,8 +63,32 @@ def compare_packets(left, right):
             right = [right]
         return compare_packets(left, right)
 
+def compare_packets(left, right):
+    # Turns out you can use match-case with class patterns. It uses isinstance internally.
+    # https://peps.python.org/pep-0622/#class-patterns
+    # This would still be better as a proper cmp function
+    match left, right:
+        case int(), int():
+            if left == right: return None
+            return left <= right
+        case list(), list():
+            for (l1, r1) in zip(left, right):
+                r = compare_packets(l1, r1)
+                if r is not None:
+                    return r
+            ll, lr = len(left), len(right)
+            if ll == lr:
+                return None
+            else:
+                return ll < lr
+        case int(), list():
+            return compare_packets([left], right)
+        case list(), int():
+            return compare_packets(left, [right])
+
 def cmp_packets(left, right):
     # Convert compare_packets to an old-style comparison function, so we can use cmp_to_key on it for sorting.
+    # ("right order" is ascending order, left < right, so -1)
     r = compare_packets(left, right)
     match r:
         case None:

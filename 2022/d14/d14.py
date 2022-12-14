@@ -32,12 +32,13 @@ def sand(walls, floor=False, wall_char=WALL_CHAR, sand_char=SAND_CHAR):
     settled_grains = 0
     
     # Drop each grain of sand one-by-one
-    falling_sand = sand_origin
-    while falling_sand is not None:
-        (x, y) = falling_sand
+    # But store the path so we can skip all but the last step of the previous grain (they all repeat)
+    fall_path = [sand_origin]
+    while fall_path:
+        (x, y) = fall_path[-1]
         # Part 1: Are we falling into the void? Then we're done!
         if not floor and y >= lowest_wall_y:
-            falling_sand = None
+            fall_path.clear()
             break
         # Try to fall down, down-left, down-right
         for (x_off, y_off) in fall_offsets:
@@ -46,19 +47,19 @@ def sand(walls, floor=False, wall_char=WALL_CHAR, sand_char=SAND_CHAR):
                 # Part 2: Reached the floor
                 continue 
             if (next_x, next_y) not in sand_map:
-                falling_sand = (next_x, next_y)
+                fall_path.append((next_x, next_y))
                 break
         else:
             # Couldn't fall, settle here.
-            sand_map[falling_sand] = sand_char
+            sand_map[(x, y)] = sand_char
             settled_grains += 1
             # Part 2: If we just settled on the origin, we're done!
-            if floor and falling_sand == sand_origin:
-                falling_sand = None
+            if floor and (x, y) == sand_origin:
+                fall_path.clear()
                 break
             else:
-                # Next piece of sand...
-                falling_sand = sand_origin
+                # Next piece of sand... but skip ahead to the previous position of this grain
+                del fall_path[-1]
     
     return (sand_map, settled_grains)
 

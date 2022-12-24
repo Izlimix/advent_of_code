@@ -51,10 +51,16 @@ def part2(ns):
     print("Part 2 result:")
     print(f"Sum of 1000th, 2000th and 3000th numbers after 0: {r}")
 
+"""
 def wrap_into(v, hi):
     if v < 0:
         cycles = -(v // hi) + 1
         return wrap_into(v + hi * cycles, hi)
+    return v % hi
+"""
+# So it turns out modulo on negative numbers is built-in.
+# -5 % 4 = 3
+def wrap_into(v, hi):
     return v % hi
 
 # Command-line execution:

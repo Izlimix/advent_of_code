@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 import re
-import operator
-from collections import defaultdict
-from functools import reduce
+import math
+from collections import Counter
+
 
 # https://adventofcode.com/2023/day/2
+"""
+Cleaned up slightly (thanks to reddit):
+- Remembered about math.prod (rather than reduce + operator.mul)
+-  and Counters (rather than defaultdict(int))!
+
+Also, turns out:
+- re.findall() could've simplified the round parsing (and omitted the ID at the front as I wanted)
+- Counter has a superset operator >= (useful for checking thresholds for part 1) and a union operator | that lets you get the max of each element from 2 Counters
+"""
 
 def part1(lines):
     # The games are in consecutive order, so we don't actually need to parse the ids
@@ -36,7 +45,7 @@ def part2(lines):
     round_pattern = re.compile("(?:: |; |, )")  # Also split on each cube value
     for l in lines:
         # Each cube value starts at 0
-        min_cubes = defaultdict(int)
+        min_cubes = Counter()
         # Split the round into (value, colour) pairs.
         for round in round_pattern.split(l):
             n, colour = round.split(" ")
@@ -47,7 +56,7 @@ def part2(lines):
         
         # Finished all the rounds!
         # Power = R * G * B
-        power = reduce(operator.mul, (min_cubes.get(colour) for colour in ["red", "green", "blue"]))
+        power = math.prod(min_cubes.get(colour) for colour in ["red", "green", "blue"])
         total += power
     print(f"Part 2: The sum of powers is: {total}")
 

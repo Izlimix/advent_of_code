@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-import math
 import re
 from collections import Counter
-from tqdm import tqdm
 
 # https://adventofcode.com/2023/day/7
 
@@ -41,31 +39,31 @@ class Hand:
                 hand["J"] = 0
                 [(best_card, _)] = hand.most_common(1)
                 hand[best_card] += js
-
         counts = [n for (_, n) in hand.most_common()]
 
         # Test for each of the 7 hand types
-        if counts[0] == 5:        
-            # 5 of a kind
-            s = 7
-        elif counts[0] == 4:
-            # 4 of a kind
-            s = 6
-        elif counts[0] == 3 and counts[1] == 2:
-            # Full house
-            s = 5
-        elif counts[0] == 3:
-            # 3 of a kind
-            s = 4
-        elif counts[0] == 2 and counts[1] == 2:
-            # Two pair
-            s = 3
-        elif counts[0] == 2:
-            # One pair
-            s = 2
-        else:
-            # High card
-            s = 1
+        match counts:
+            case 5, *_:
+                # 5 of a kind
+                s = 7
+            case 4, *_:
+                # 4 of a kind
+                s = 6
+            case 3, 2, *_:
+                # Full house
+                s = 5
+            case 3, *_:
+                # 3 of a kind
+                s = 4
+            case 2, 2, *_:
+                # Two pair
+                s = 3
+            case 2, *_:
+                # One pair
+                s = 2
+            case _:
+                # High card
+                s = 1
 
         # Use card strengths in order for tiebreaker
         if not self.jokers:

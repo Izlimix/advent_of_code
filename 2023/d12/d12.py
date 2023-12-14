@@ -16,6 +16,7 @@ def part1(lines):
         total += arrangements
         # print(f"Found {arrangements} arrangements!")
     
+    print(f"Part 1 cache stats: {place_springs.cache_info()}")
     print(f"Part 1: {total=}")
     
 
@@ -33,6 +34,7 @@ def part2(lines):
         total += arrangements
         # print(f"Found {arrangements} arrangements!")
     
+    print(f"Part 2 cache stats (incl p1): {place_springs.cache_info()}")
     print(f"Part 2: {total=}")
 
 @cache
